@@ -7,11 +7,16 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="output"></div>
-    <button id="start">START</button>
-    <button id="pause">PAUSE</button>
-    <button id="clear">CLEAR</button> <br>
-    <button id="plus"> &plus; </button> <button id="minus"> &minus; </button>
+    <div id="ctrlButtons">
+        <button id="timerMinus">&minus;</button><span id="timerDisplay"></span><button id="timerPlus">&plus;</button> <button id="breakMinus">&minus;</button><span id="breakDisplay"></span><button id="breakPlus">&plus;</button>
+        <div id="breakDisplay"></div>
+        <button id="start">START</button>
+        <button id="pause">PAUSE</button>
+        <button id="clear">CLEAR</button>
+        <br>
+    </div>
+    <span id="timerOutput"></span> <br>
+    <span id="breakOutput"></span>
 </body>
 <script src="./app.js"></script>
 </html>

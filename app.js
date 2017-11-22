@@ -1,5 +1,8 @@
 // 25 minutes of milliseconds and variable for display time
-let countdownTime = 1500000,
+let defaultTime = 1500000,
+    breakTime = 300000,
+    cacheTime,
+    cacheBreakTime,
     timeToDisplay
 
 //  create minutes and seconds vars for display
@@ -7,19 +10,52 @@ let minutes,
     seconds
 
 // cache html elements
-let timeDiv = document.querySelector('#output')
+let timeDiv = document.querySelector('#timerOutput')
+let breakDiv = document.querySelector('#breakOutput')
 let startButton = document.querySelector('#start')
 let pauseButton = document.querySelector('#pause')
 let resetTimer = document.querySelector('#clear')
-let minusButton = document.querySelector('#minus')
-let plusButton = document.querySelector('#plus')
+let timerMinusButton = document.querySelector('#timerMinus')
+let timerPlusButton = document.querySelector('#timerPlus')
+let breakMinusButton = document.querySelector('#breakMinus')
+let breakPlusButton = document.querySelector('#breakPlus')
+let timerDisplay = document.querySelector('#timerDisplay')
+let breakDisplay = document.querySelector('#breakDisplay')
 
 
-timeToDisplay = countdownTime
+timeToDisplay = defaultTime
+breakTimeToDisplay = breakTime
+cacheTime = defaultTime
+cacheBreakTime = breakTime
 
-let displayTime = () => {
-    minutes = Math.floor(timeToDisplay / 1000 / 60 % 60)
-    seconds = Math.floor(timeToDisplay / 1000 % 60)
+
+// SHorthand function only displays minutes 
+let timerShorthand = (milliseconds) => {
+    minutes = Math.floor(milliseconds / 1000 / 60 % 60)
+    timeToDisplay = minutes * 60 * 1000
+
+    minutes < 10 ? minutes = '0' + minutes : minutes = minutes
+
+    timeDiv.innerText = minutes
+    timerDisplay.innerText = minutes
+}
+
+let breakShorthand = (milliseconds) => {
+    minutes = Math.floor(milliseconds / 1000 / 60 % 60)
+    breakTimeToDisplay = minutes * 60 * 1000
+
+    minutes < 10 ? minutes = '0' + minutes : minutes = minutes
+
+    breakDisplay.innerText = minutes
+    if(timeToDisplay < 0) {
+        timeDiv.innerText = minutes
+    }
+}
+
+//  Active timer displays time as loop is in progress
+let activeTimer = (milliseconds) => {
+    minutes = Math.floor(milliseconds / 1000 / 60 % 60)
+    seconds = Math.floor(milliseconds / 1000 % 60)
     minutes < 10 ? minutes = '0' + minutes : minutes = minutes
     seconds < 10 ? seconds = '0' + seconds : seconds = seconds
 
@@ -29,22 +65,35 @@ let displayTime = () => {
 let checkvar = false
 
 let timer = () => {
-	checkvar === false && timeToDisplay > 0 ? (
-        displayTime(),
+	(checkvar === false && timeToDisplay >= 0) ? (
+        activeTimer(timeToDisplay),
         timeToDisplay -= 1000,
         console.log('Running...'),
         pauseButton.addEventListener('click', pauseTimer),
         resetTimer.addEventListener('click', clearOutTimer),
         startButton.removeEventListener('click', timer),
-        minusButton.removeEventListener('click', removeTime),
-        plusButton.removeEventListener('click', addTime),
+        timerMinusButton.removeEventListener('click', decreaseTimer),
+        timerPlusButton.removeEventListener('click', increaseTimer),
 
         setTimeout(timer, 1000)
-	) : (
-        console.log('Timer cleared'),
-        displayTime(),
-        clearTimeout(timer),
-        checkvar = false
+	) : (checkvar === false && timeToDisplay === -1000 && breakTimeToDisplay >= 0) ? (
+            activeTimer(breakTimeToDisplay),
+            breakTimeToDisplay -= 1000,
+            console.log('On break...'),
+
+            setTimeout(timer, 1000)
+    ) : (checkvar === false && timeToDisplay === -1000 && breakTimeToDisplay === -1000) ? (
+            timeToDisplay = cacheTime,
+            breakTimeToDisplay = cacheBreakTime,
+            activeTimer(timeToDisplay),
+            timeToDisplay -= 1000,
+
+            setTimeout(timer, 1000)
+    ) : (
+
+            console.log('Timer cleared'),
+            clearTimeout(timer),
+            checkvar = false
 	)
 }
 
@@ -52,37 +101,62 @@ let pauseTimer = () => {
     checkvar = true,
     startButton.addEventListener('click', timer),
     pauseButton.removeEventListener('click', pauseTimer)
+    timerPlusButton.addEventListener('click', increaseTimer),
+    timerMinusButton.addEventListener('click', decreaseTimer)
 }
 
 let clearOutTimer = () => {
     checkvar = true,
-    timeToDisplay = countdownTime,
-    displayTime(),
+    timeToDisplay = cacheTime,
+    breakTimeToDisplay = cacheBreakTime,
+    timerShorthand(timeToDisplay),
     startButton.addEventListener('click', timer),
     pauseButton.removeEventListener('click', pauseTimer),
-    plusButton.addEventListener('click', addTime),
-    minusButton.addEventListener('click', removeTime)
+    timerPlusButton.addEventListener('click', increaseTimer),
+    timerMinusButton.addEventListener('click', decreaseTimer)
 }
 
 
-let addTime = () => {
+let increaseTimer = () => {
     timeToDisplay += 60000
-    displayTime()
+    cacheTime += 60000
+    timerShorthand(timeToDisplay)
 }
 
-let removeTime = () => {
+let decreaseTimer = () => {
     if(timeToDisplay > 60000) {
         timeToDisplay -= 60000
+        cacheTime -= 60000
      } else {
          return
      }
-    displayTime()
+    timerShorthand(timeToDisplay)
+}
+
+let increaseBreak = () => {
+    breakTimeToDisplay += 60000
+    cacheTime += 60000
+    breakShorthand(breakTimeToDisplay)
+}
+
+let decreaseBreak = () => {
+    if(breakTimeToDisplay > 60000) {
+        breakTimeToDisplay -= 60000
+        cacheTime -= 60000
+     } else {
+         return
+     }
+    breakShorthand(breakTimeToDisplay)
 }
 
 // create function to make adjustTime an interval to be able to remove eventListeners
 
 startButton.addEventListener('click', timer)
-minusButton.addEventListener('click', removeTime)
-plusButton.addEventListener('click', addTime)
+timerMinusButton.addEventListener('click', decreaseTimer)
+timerPlusButton.addEventListener('click', increaseTimer)
 
-displayTime()
+breakMinusButton.addEventListener('click', decreaseBreak)
+breakPlusButton.addEventListener('click', increaseBreak)
+
+timerShorthand(timeToDisplay)
+breakShorthand(breakTimeToDisplay)
