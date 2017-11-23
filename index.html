@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./main.css">
     <title>Document</title>
 </head>
 <body>
-    <div id="ctrlButtons">
-        <button id="timerMinus">&minus;</button><span id="timerDisplay"></span><button id="timerPlus">&plus;</button> <button id="breakMinus">&minus;</button><span id="breakDisplay"></span><button id="breakPlus">&plus;</button>
-        <div id="breakDisplay"></div>
-        <button id="start">START</button>
-        <button id="pause">PAUSE</button>
-        <button id="clear">CLEAR</button>
-        <br>
+    <div class="wrapper">
+        <div class="one">
+                <button id="timerMinus">&minus;</button><span id="timerDisplay"></span><button id="timerPlus">&plus;</button> <button id="breakMinus">&minus;</button><span id="breakDisplay"></span><button id="breakPlus">&plus;</button>
+                <div id="breakDisplay"></div>
+            </div>
+            <div class="two">
+                <button id="start">START</button>
+                <button id="pause">PAUSE</button>
+                <button id="clear">CLEAR</button>
+            </div>
+            <br>    
+        <div class="three">
+            <span id="timerOutput"></span>
+        </div>
     </div>
-    <span id="timerOutput"></span> <br>
-    <span id="breakOutput"></span>
 </body>
 <script src="./app.js"></script>
 </html>

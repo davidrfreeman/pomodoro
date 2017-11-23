@@ -1,0 +1,27 @@
+body {
+    height: 98vh;
+}
+
+.wrapper {
+    display: grid;
+    grid-template: 25px 1fr 1fr 3fr 50px / 50px 1fr 50px;
+    grid-gap: 10px;
+}
+
+.one {
+    grid-area: 2 / 2 / 3 / 3;
+    justify-self: center;  
+}
+
+.two {
+    grid-area: 3 / 2 / 4 / 3;
+    justify-self: center;  
+}
+
+.three {
+    grid-area: 4 / 2 / 5 / 3;
+    justify-self: center;
+    align-self: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+}

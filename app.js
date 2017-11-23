@@ -11,7 +11,6 @@ let minutes,
 
 // cache html elements
 let timeDiv = document.querySelector('#timerOutput')
-let breakDiv = document.querySelector('#breakOutput')
 let startButton = document.querySelector('#start')
 let pauseButton = document.querySelector('#pause')
 let resetTimer = document.querySelector('#clear')
@@ -59,7 +58,7 @@ let activeTimer = (milliseconds) => {
     minutes < 10 ? minutes = '0' + minutes : minutes = minutes
     seconds < 10 ? seconds = '0' + seconds : seconds = seconds
 
-    timeDiv.innerText = minutes + ' ' + seconds
+    timeDiv.innerText = minutes + ' : ' + seconds
 }
 
 let checkvar = false
@@ -74,21 +73,28 @@ let timer = () => {
         startButton.removeEventListener('click', timer),
         timerMinusButton.removeEventListener('click', decreaseTimer),
         timerPlusButton.removeEventListener('click', increaseTimer),
+        breakMinusButton.removeEventListener('click', decreaseBreak),
+        breakPlusButton.removeEventListener('click', increaseBreak),
 
         setTimeout(timer, 1000)
 	) : (checkvar === false && timeToDisplay === -1000 && breakTimeToDisplay >= 0) ? (
             activeTimer(breakTimeToDisplay),
             breakTimeToDisplay -= 1000,
             console.log('On break...'),
+            pauseButton.addEventListener('click', pauseTimer),
+            resetTimer.addEventListener('click', clearOutTimer),
+            startButton.removeEventListener('click', timer),
+            timerMinusButton.removeEventListener('click', decreaseTimer),
+            timerPlusButton.removeEventListener('click', increaseTimer),
+            breakMinusButton.removeEventListener('click', decreaseBreak),
+            breakPlusButton.removeEventListener('click', increaseBreak),
 
             setTimeout(timer, 1000)
     ) : (checkvar === false && timeToDisplay === -1000 && breakTimeToDisplay === -1000) ? (
             timeToDisplay = cacheTime,
             breakTimeToDisplay = cacheBreakTime,
             activeTimer(timeToDisplay),
-            timeToDisplay -= 1000,
-
-            setTimeout(timer, 1000)
+            timer()
     ) : (
 
             console.log('Timer cleared'),
@@ -102,7 +108,9 @@ let pauseTimer = () => {
     startButton.addEventListener('click', timer),
     pauseButton.removeEventListener('click', pauseTimer)
     timerPlusButton.addEventListener('click', increaseTimer),
-    timerMinusButton.addEventListener('click', decreaseTimer)
+    timerMinusButton.addEventListener('click', decreaseTimer),
+    breakMinusButton.addEventListener('click', decreaseBreak),
+    breakPlusButton.addEventListener('click', increaseBreak)
 }
 
 let clearOutTimer = () => {
@@ -113,7 +121,9 @@ let clearOutTimer = () => {
     startButton.addEventListener('click', timer),
     pauseButton.removeEventListener('click', pauseTimer),
     timerPlusButton.addEventListener('click', increaseTimer),
-    timerMinusButton.addEventListener('click', decreaseTimer)
+    timerMinusButton.addEventListener('click', decreaseTimer),
+    breakMinusButton.addEventListener('click', decreaseBreak),
+    breakPlusButton.addEventListener('click', increaseBreak)
 }
 
 
