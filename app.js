@@ -134,7 +134,7 @@ let increaseTimer = () => {
 }
 
 let decreaseTimer = () => {
-    if(timeToDisplay > 60000) {
+    if(timeToDisplay > 60000 && cacheTime > 60000) {
         timeToDisplay -= 60000
         cacheTime -= 60000
      } else {
@@ -145,14 +145,14 @@ let decreaseTimer = () => {
 
 let increaseBreak = () => {
     breakTimeToDisplay += 60000
-    cacheTime += 60000
+    cacheBreakTime += 60000
     breakShorthand(breakTimeToDisplay)
 }
 
 let decreaseBreak = () => {
-    if(breakTimeToDisplay > 60000) {
+    if(breakTimeToDisplay > 60000 && cacheBreakTime > 60000) {
         breakTimeToDisplay -= 60000
-        cacheTime -= 60000
+        cacheBreakTime -= 60000
      } else {
          return
      }
